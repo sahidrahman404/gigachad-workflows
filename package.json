@@ -16,8 +16,9 @@
     "@restatedev/restate-sdk": "^0.7.0"
   },
   "devDependencies": {
+    "esbuild": "^0.18.12",
     "ts-node-dev": "^1.1.1",
     "typescript": "^5.0.2",
-    "esbuild": "^0.18.12"
+    "vitest": "^1.3.1"
   }
 }
