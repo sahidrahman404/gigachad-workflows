@@ -13,9 +13,16 @@
     "app-dev": "ts-node-dev --watch ./src --respawn --transpile-only ./src/app.ts"
   },
   "dependencies": {
-    "@restatedev/restate-sdk": "^0.7.0"
+    "@react-email/components": "0.0.15",
+    "@react-email/render": "0.0.12",
+    "@restatedev/restate-sdk": "^0.7.0",
+    "nodemailer": "^6.9.11",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@types/nodemailer": "^6.4.14",
+    "@types/react": "^18.2.61",
     "esbuild": "^0.18.12",
     "ts-node-dev": "^1.1.1",
     "typescript": "^5.0.2",
