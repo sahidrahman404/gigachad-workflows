@@ -1,4 +1,5 @@
 import * as restate from "@restatedev/restate-sdk";
+import { emailApi, emailRouter } from "./email";
 
 // Template of a Restate handler that simply echos the request.
 //
@@ -12,18 +13,9 @@ import * as restate from "@restatedev/restate-sdk";
 //
 // Have a look at the TS docs on the context, or at https://docs.restate.dev/
 //
-const sayHello = async (ctx: restate.RpcContext, name: string) => {
-  return `Hello ${name}!`;
-};
 
 // Create the Restate server to accept requests
-restate
-  .createServer()
-  .bindRouter(
-    "myservice", // the name of the service that serves the handlers
-    restate.router({ hello: sayHello }) // the routes and handlers in the service
-  )
-  .listen(9080);
+restate.createServer().bindRouter(emailApi.path, emailRouter).listen(9080);
 
 // --------------
 //  Testing this
