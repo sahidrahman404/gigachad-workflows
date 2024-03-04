@@ -1,29 +1,35 @@
 import { render } from "@react-email/render";
 import nodemailer from "nodemailer";
-import { NotionMagicLinkEmail } from "./template/reminder";
-import * as restate from "@restatedev/restate-sdk";
+import {
+  WorkoutReminderEmail,
+  WorkoutReminderEmailProps,
+} from "./template/reminder";
 
-async function send(ctx: restate.RpcContext, request: {}) {
+type SendWorkoutReminderPayload = WorkoutReminderEmailProps & { email: string };
+
+async function sendWorkoutReminder(payload: SendWorkoutReminderPayload) {
   const transporter = nodemailer.createTransport({
-    host: "",
-    port: 0,
-    secure: false,
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT),
+    auth: {
+      user: process.env.SMTP_USERNAME,
+      pass: process.env.SMTP_PASSWORD,
+    },
   });
 
-  const emailHtml = render(NotionMagicLinkEmail({}));
+  const emailHtml = render(WorkoutReminderEmail(payload));
+  const emailtext = render(WorkoutReminderEmail(payload), { plainText: true });
 
   const options = {
-    from: "you@example.com",
-    to: "user@gmail.com",
-    subject: "hello world",
+    from: "reminder@gigachad.buzz",
+    to: payload.email,
+    subject: "Your Daily Workout Reminder",
     html: emailHtml,
+    text: emailtext,
   };
 
-  await transporter.sendMail(options);
+  return await transporter.sendMail(options);
 }
 
-export const emailRouter = restate.router({ send });
-
-export const emailApi: restate.ServiceApi<typeof emailRouter> = {
-  path: "Email",
-};
+export { sendWorkoutReminder };
+export type { SendWorkoutReminderPayload };
