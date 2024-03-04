@@ -1,35 +1,26 @@
 import * as restate from "@restatedev/restate-sdk";
-import { WEEKLY_INTERVAL } from "./utils/getBaseMilliseconds";
 import { SendWorkoutReminderPayload, sendWorkoutReminder } from "./email";
-
-type ReminderPayload = SendWorkoutReminderPayload & {
-  baseMilliseconds: number;
-};
+import { WEEKLY_INTERVAL } from "./utils/getBaseMilliseconds";
 
 async function remind(
   ctx: restate.RpcContext,
   scheduleID: string,
-  request: ReminderPayload,
+  payload: SendWorkoutReminderPayload,
 ) {
-  const { baseMilliseconds } = request;
   const removed = (await ctx.get<boolean>("REMOVED")) ?? false;
   if (!removed) {
     const retrySettings = { maxRetries: 2 };
     await ctx.sideEffect(
-      async () => await sendWorkoutReminder(request),
+      async () => await sendWorkoutReminder(payload),
       retrySettings,
     );
-    ctx
-      .sendDelayed(reminderApi, baseMilliseconds + WEEKLY_INTERVAL)
-      .remind(scheduleID, request);
+    ctx.sendDelayed(reminderApi, WEEKLY_INTERVAL).remind(scheduleID, payload);
   }
 }
 
-async function removeReminder(ctx: restate.RpcContext, scheduleID: string) {
+async function removeReminder(ctx: restate.RpcContext, _: string) {
   ctx.set<boolean>("REMOVED", true);
 }
-
-export { ReminderPayload };
 
 export const reminderRouter = restate.keyedRouter({ remind, removeReminder });
 
