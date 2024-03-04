@@ -1,6 +1,7 @@
 import * as restate from "@restatedev/restate-sdk";
 import { Schedule, getBaseMilliseconds } from "./utils/getBaseMilliseconds";
-import { ReminderPayload, reminderApi } from "./reminder";
+import { reminderApi } from "./reminder";
+import { SendWorkoutReminderPayload } from "./email";
 
 type ScheduleWithID = Schedule & {
   scheduleID: string;
@@ -8,7 +9,7 @@ type ScheduleWithID = Schedule & {
 
 type ScheduleInput = {
   schedules: ScheduleWithID[];
-  payload: ReminderPayload;
+  payload: SendWorkoutReminderPayload;
 };
 
 async function createSchedule(ctx: restate.RpcContext, request: ScheduleInput) {
