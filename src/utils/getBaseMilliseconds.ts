@@ -5,7 +5,7 @@ type Schedule = {
   hour: number;
 };
 
-const INTERVAL = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+const WEEKLY_INTERVAL = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
 
 function getBaseMilliseconds({ day, hour, minute, second }: Schedule): number {
   const currentDate = new Date();
@@ -27,4 +27,4 @@ function getBaseMilliseconds({ day, hour, minute, second }: Schedule): number {
 }
 
 export type { Schedule };
-export { getBaseMilliseconds, INTERVAL };
+export { getBaseMilliseconds, WEEKLY_INTERVAL };
