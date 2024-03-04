@@ -1,5 +1,6 @@
 import * as restate from "@restatedev/restate-sdk";
 import { scheduleApi, scheduleRouter } from "./schedule";
+import { reminderApi, reminderRouter } from "./reminder";
 
 // Template of a Restate handler that simply echos the request.
 //
@@ -18,6 +19,7 @@ import { scheduleApi, scheduleRouter } from "./schedule";
 restate
   .createServer()
   .bindRouter(scheduleApi.path, scheduleRouter)
+  .bindKeyedRouter(reminderApi.path, reminderRouter)
   .listen(9080);
 
 // --------------
