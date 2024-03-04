@@ -23,7 +23,11 @@ function getBaseMilliseconds({ day, hour, minute, second }: Schedule): number {
   base.setUTCMinutes(minute); // Set the minutes
   base.setUTCSeconds(second); // Set the seconds
 
-  return base.getTime();
+  if (base.getTime() < currentDate.getTime()) {
+    return base.getTime() + WEEKLY_INTERVAL - currentDate.getTime();
+  }
+
+  return base.getTime() - currentDate.getTime();
 }
 
 export type { Schedule };

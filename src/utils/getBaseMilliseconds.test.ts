@@ -1,5 +1,5 @@
 import { test, expect, describe } from "vitest";
-import { getBaseMilliseconds } from "./getBaseMilliseconds";
+import { WEEKLY_INTERVAL, getBaseMilliseconds } from "./getBaseMilliseconds";
 
 describe("get base milliseconds", () => {
   test("should return the same day if the schedule hasn't passed the current date", () => {
@@ -13,9 +13,9 @@ describe("get base milliseconds", () => {
       second: currDate.getUTCSeconds(),
     });
 
-    const expected = new Date(currDate);
+    const expected = 10 * 60 * 1000;
 
-    expect(base).toStrictEqual(expected.getTime());
+    expect(base).toBe(expected);
   });
 
   test("should return the next week if the schedule has passed the current date", () => {
@@ -29,9 +29,11 @@ describe("get base milliseconds", () => {
       second: currDate.getUTCSeconds(),
     });
 
-    const expected = new Date(currDate);
+    const tenMinute = 10 * 60 * 1000;
 
-    expect(base).toStrictEqual(expected.getTime());
+    const expected = WEEKLY_INTERVAL - tenMinute;
+
+    expect(base).toBe(expected);
   });
 
   test("should return the next week if the schedule has passed the current date", () => {
@@ -45,9 +47,10 @@ describe("get base milliseconds", () => {
       second: currDate.getUTCSeconds(),
     });
 
-    const expected = new Date(currDate);
-    expected.setDate(currDate.getDate() + 7);
+    const day = WEEKLY_INTERVAL / 7;
 
-    expect(base).toStrictEqual(expected.getTime());
+    const expected = WEEKLY_INTERVAL - day;
+
+    expect(base).toStrictEqual(expected);
   });
 });
