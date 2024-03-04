@@ -1,11 +1,8 @@
 import * as restate from "@restatedev/restate-sdk";
-import { RoutineExercise } from "./schedule";
-import { INTERVAL } from "./utils/getBaseMilliseconds";
+import { WEEKLY_INTERVAL } from "./utils/getBaseMilliseconds";
+import { SendWorkoutReminderPayload, sendWorkoutReminder } from "./email";
 
-type ReminderPayload = {
-  email: string;
-  fullName: string;
-  routineExercises: RoutineExercise[];
+type ReminderPayload = SendWorkoutReminderPayload & {
   baseMilliseconds: number;
 };
 
@@ -17,8 +14,13 @@ async function remind(
   const { baseMilliseconds } = request;
   const removed = (await ctx.get<boolean>("REMOVED")) ?? false;
   if (!removed) {
+    const retrySettings = { maxRetries: 2 };
+    await ctx.sideEffect(
+      async () => await sendWorkoutReminder(request),
+      retrySettings,
+    );
     ctx
-      .sendDelayed(reminderApi, baseMilliseconds + INTERVAL)
+      .sendDelayed(reminderApi, baseMilliseconds + WEEKLY_INTERVAL)
       .remind(scheduleID, request);
   }
 }
