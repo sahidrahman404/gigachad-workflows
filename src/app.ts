@@ -1,5 +1,5 @@
 import * as restate from "@restatedev/restate-sdk";
-import { emailApi, emailRouter } from "./email";
+import { scheduleApi, scheduleRouter } from "./schedule";
 
 // Template of a Restate handler that simply echos the request.
 //
@@ -15,7 +15,10 @@ import { emailApi, emailRouter } from "./email";
 //
 
 // Create the Restate server to accept requests
-restate.createServer().bindRouter(emailApi.path, emailRouter).listen(9080);
+restate
+  .createServer()
+  .bindRouter(scheduleApi.path, scheduleRouter)
+  .listen(9080);
 
 // --------------
 //  Testing this
